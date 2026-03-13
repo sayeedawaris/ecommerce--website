@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product</title>
+    <link rel="stylesheet" href="product.css" />
+</head>
+
+<body>
+     <div class="container2">
+    <div class="nav-inner">
+ <div class="logo-container">
+  <h1 class="logo"> 🛍️ Z E N V Y </h1>
+</div>
+      <div class="search-wrap">
+        <div class="search-inner">
+         <input id="search-input" type="text" placeholder=" Search for products, brands and more..." oninput="handleSearch()" />
+
+<div id="search-suggestions" class="search-suggestions"></div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <a href="#trending" class="nav-link">Deals</a>
+        <a href="#categories" class="nav-link">Categories</a>
+        <a href="#" class="nav-link">Support</a>
+        <button id="logoutBtn">Logout
+</button>
+        <button class="icon-btn" onclick="openWishlist()" title="Wishlist">
+  <img src="fav.png" alt="wishlist" style="width:20px;height:20px;"/>
+  <span class="cart-badge" id="wish-badge">0</span>
+</button>
+        <div class="nav-sep"></div>
+      
+        <button class="icon-btn" onclick="openCart()" title="Cart">
+          <span class="material-symbols-outlined"><img src="add-to-kart.svg" alt="add-to-kart-img"></span>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+    </div>
+    <div class="container">
+        <div class="product-page">
+            <div class="product-images">
+                <img id="main-image" class="main-image" />
+
+                <div class="thumbs">
+                    <img id="thumb1" />
+                    <img id="thumb2" />
+                    <img id="thumb3" />
+                </div>
+            </div>
+
+            <div class="product-info">
+                <h1 id="title"></h1>
+
+                <div class="rating">⭐ <span id="rating"></span></div>
+
+                <h2 id="price"></h2>
+
+                <p id="description"></p>
+
+                <div class="buttons">
+                    <button class="add-cart">Add to Cart</button>
+                    <button class="buy-now">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="product.js"></script>
+</body>
+
+</html>

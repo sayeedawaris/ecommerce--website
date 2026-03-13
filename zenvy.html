@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zenvy</title>
+    <link rel="stylesheet" href="zenvy.css">
+    <link rel="stylesheet" href="zenvy-profile-additions.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+
+<div id="cart-overlay">
+  <div id="cart-backdrop"></div>
+  <div id="cart-panel">
+    <div class="cart-head">
+      <h2>
+        <span class="material-symbols-outlined" style="color:#fff"><img src="add-to-kart.svg" alt="add-to-kart-img"></span>
+        My Cart
+        <span class="badge" id="cart-head-count">0 items</span>
+      </h2>
+      <button class="cart-close-btn" onclick="closeCart()">
+        <span class="material-symbols-outlined"><img src="close.svg" alt="close-img"></span>
+      </button>
+    </div>
+    <div id="cart-body"></div>
+    <div id="cart-foot" class="cart-foot" style="display:none">
+      <div class="cart-row"><span>Subtotal</span><span id="cart-sub">$0.00</span></div>
+      <div class="cart-row"><span>Delivery</span><span class="free">FREE</span></div>
+      <div class="cart-row total"><span>Total</span><span class="tv" id="cart-tot">$0.00</span></div>
+      <button class="checkout-btn">Proceed to Checkout &rarr;</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="wish-overlay">
+  <div id="wish-backdrop"></div>
+  <div id="wish-panel">
+    <div class="cart-head">
+      <h2>
+        <img src="fav.png" alt="wishlist" style="width:20px;height:20px;"/>
+        My Wishlist
+        <span class="badge" id="wish-head-count">0 items</span>
+      </h2>
+      <button class="cart-close-btn" onclick="closeWishlist()">
+        <img src="close.svg" alt="close" style="width:20px;height:20px;"/>
+      </button>
+    </div>
+    <div id="wish-body"></div>
+  </div>
+</div>
+
+
+<div id="auth-prompt-overlay">
+  <div id="auth-prompt-backdrop" onclick="closeAuthPrompt()"></div>
+  <div id="auth-prompt-card">
+    <div class="ap-icon">🔒</div>
+    <h3 class="ap-title">Login Required</h3>
+    <p class="ap-msg" id="auth-prompt-msg">You need to be logged in to continue.</p>
+    <div class="ap-btns">
+      <a href="login.html" class="ap-btn-main">Login</a>
+      <a href="signup.html" class="ap-btn-ghost">Create Account</a>
+    </div>
+    <button class="ap-close" onclick="closeAuthPrompt()">✕ Maybe later</button>
+  </div>
+</div>
+
+
+<div id="profile-overlay">
+  <div id="profile-backdrop"></div>
+  <div id="profile-panel">
+
+    <div class="prof-head">
+      <div class="prof-avatar" id="prof-initials">U</div>
+      <div class="prof-hinfo">
+        <div class="prof-hname" id="prof-name">User</div>
+        <div class="prof-hemail" id="prof-email">user@email.com</div>
+      </div>
+      <button class="cart-close-btn" onclick="closeProfile()">
+        <img src="close.svg" alt="close" style="width:18px;height:18px;filter:invert(1)"/>
+      </button>
+    </div>
+
+    <div class="prof-stats">
+      <div class="prof-stat" onclick="closeProfile();openCart()">
+        <div class="ps-val" id="prof-cart-count">0 items</div>
+        <div class="ps-lbl">🛒 Cart</div>
+        <div class="ps-sub" id="prof-cart-total">$0.00</div>
+      </div>
+      <div class="prof-stat" onclick="closeProfile();openWishlist()">
+        <div class="ps-val" id="prof-wish-count">0 items</div>
+        <div class="ps-lbl">♥ Wishlist</div>
+        <div class="ps-sub">saved</div>
+      </div>
+    </div>
+
+    <div class="prof-section">
+      <div class="prof-sec-head">♥ My Wishlist</div>
+      <div id="prof-wish-list"></div>
+    </div>
+
+    <div class="prof-section">
+      <div class="prof-sec-head">🛒 Items in Cart</div>
+      <div id="prof-cart-list"></div>
+    </div>
+
+    <div class="prof-footer">
+      <button class="prof-logout-btn" onclick="document.getElementById('logoutBtn').click()">
+        Logout
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="nav-inner">
+    <div class="logo-container">
+      <h1 class="logo"> 🛍️ Z E N V Y </h1>
+    </div>
+    <div class="search-wrap">
+      <div class="search-inner">
+        <input id="search-input" type="text" placeholder=" Search for products, brands and more..." oninput="handleSearch()" />
+        <div id="search-suggestions" class="search-suggestions"></div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="#trending" class="nav-link">Deals</a>
+      <a href="#categories" class="nav-link">Categories</a>
+      <a href="#" class="nav-link">Support</a>
+      <button id="logoutBtn">Logout</button>
+
+      <button class="icon-btn" onclick="openWishlist()" title="Wishlist">
+        <img src="fav.png" alt="wishlist" style="width:20px;height:20px;"/>
+        <span class="cart-badge" id="wish-badge">0</span>
+      </button>
+
+      <div class="nav-sep"></div>
+
+      <button class="icon-btn" onclick="openCart()" title="Cart">
+        <span class="material-symbols-outlined"><img src="add-to-kart.svg" alt="add-to-kart-img"></span>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+
+      <button class="icon-btn" onclick="openProfile()" title="My Profile">
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343">
+          <path d="M226-262q59-42.33 121.33-65.5 62.34-23.17 132.67-23.17 70.33 0 133 23.17T734.67-262q41-49.67 59.83-103.67T813.33-480q0-141-96.16-237.17Q621-813.33 480-813.33t-237.17 96.16Q146.67-621 146.67-480q0 60.33 19.16 114.33Q185-311.67 226-262Zm155.83-224.5Q342-526.33 342-584.67q0-58.33 39.83-98.16 39.84-39.84 98.17-39.84t98.17 39.84Q618-643 618-584.67q0 58.34-39.83 98.17-39.84 39.83-98.17 39.83t-98.17-39.83ZM480-80q-82.33 0-155.33-31.5-73-31.5-127.34-85.83Q143-251.67 111.5-324.67T80-480q0-83 31.5-155.67 31.5-72.66 85.83-127Q251.67-817 324.67-848.5T480-880q83 0 155.67 31.5 72.66 31.5 127 85.83 54.33 54.34 85.83 127Q880-563 880-480q0 82.33-31.5 155.33-31.5 73-85.83 127.34-54.34 54.33-127 85.83Q563-80 480-80Zm105-82.5q50.67-15.83 97.67-52.17-47-33.66-98-51.5Q533.67-284 480-284t-104.67 17.83q-51 17.84-98 51.5 47 36.34 97.67 52.17 50.67 15.83 105 15.83t105-15.83Zm-53.67-370.83q20-20 20-51.34 0-31.33-20-51.33T480-656q-31.33 0-51.33 20t-20 51.33q0 31.34 20 51.34 20 20 51.33 20t51.33-20ZM480-584.67Zm0 369.34Z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+
+<section class="hero-sec">
+  <div class="container">
+    <div class="hero-wrap" id="carousel">
+
+      <div class="c-slide active">
+        <div class="slide-bg" style="background-image:linear-gradient(to right,rgba(0,0,0,.82) 40%,rgba(0,0,0,.15)),url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&q=80')"></div>
+        <div class="slide-content">
+          <span class="slide-badge" style="background:rgba(19,127,236,.2);color:#60a5fa;border:1px solid rgba(19,127,236,.3)">Limited Time Offer</span>
+          <h1 class="slide-title">Seasonal Winter<br/>Collection Sale</h1>
+          <p class="slide-desc">Up to 50% off on premium electronics, fashion & home essentials.</p>
+          <div class="slide-btns">
+            <button class="btn-primary" onclick="scrollToProducts()">Shop the Sale</button>
+            <button class="btn-ghost">View Lookbook</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-slide">
+        <div class="slide-bg" style="background-image:linear-gradient(to right,rgba(0,0,0,.82) 40%,rgba(0,0,0,.15)),url('https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1400&q=80')"></div>
+        <div class="slide-content">
+          <span class="slide-badge" style="background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)">New Arrivals</span>
+          <h1 class="slide-title">Latest in<br/>Electronics 2025</h1>
+          <p class="slide-desc">Newest gadgets, laptops and tech accessories at great prices.</p>
+          <div class="slide-btns">
+            <button class="btn-primary" style="background:#f59e0b;color:#0f172a" onclick="filterByCategory('electronics')">Shop Electronics</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-slide">
+        <div class="slide-bg" style="background-image:linear-gradient(to right,rgba(0,0,0,.82) 40%,rgba(0,0,0,.15)),url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80')"></div>
+        <div class="slide-content">
+          <span class="slide-badge" style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)">Flash Sale</span>
+          <h1 class="slide-title">Fashion Picks<br/>Under $50</h1>
+          <p class="slide-desc">Curated clothing and accessories, priced just right.</p>
+          <div class="slide-btns">
+            <button class="btn-primary" style="background:#22c55e" onclick="filterByCategory('women\'s clothing')">Shop Fashion</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-arrows">
+        <button class="c-arrow" onclick="prevSlide()"><span class="material-symbols-outlined"><img src="left.svg" alt="left-icon-img"></span></button>
+        <button class="c-arrow" onclick="nextSlide()"><span class="material-symbols-outlined"><img src="right.svg" alt="right-icon-img"></span></button>
+      </div>
+      <div class="c-dots">
+        <button class="dot active" onclick="goSlide(0)"></button>
+        <button class="dot" onclick="goSlide(1)"></button>
+        <button class="dot" onclick="goSlide(2)"></button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="categories">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-head-l">
+        <h2>Shop by Category</h2>
+        <p>Explore our curated collections across all departments</p>
+      </div>
+      <button class="view-all" onclick="filterByCategory('all')">View All <span></span></button>
+    </div>
+    <div class="cat-grid" id="cat-grid">
+      <div class="skeleton" style="height:130px;border-radius:16px"></div>
+      <div class="skeleton" style="height:130px;border-radius:16px"></div>
+      <div class="skeleton" style="height:130px;border-radius:16px"></div>
+      <div class="skeleton" style="height:130px;border-radius:16px"></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="trending">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-head-l">
+        <h2 id="prod-heading">Trending Products</h2>
+        <p id="prod-sub">Best picks fetched live from our store</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span id="result-info"></span>
+        <button id="clear-btn" onclick="filterByCategory('all')" style="display:none;color:var(--primary);font-size:.8rem;font-weight:700">Clear filter</button>
+      </div>
+    </div>
+    <div class="filter-strip" id="filter-strip"></div>
+    <div class="prod-grid" id="prod-grid">
+      <div class="skel-card"><div class="skeleton" style="height:160px;margin-bottom:12px"></div><div class="skeleton" style="height:10px;width:40%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;margin-bottom:6px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:14px"></div><div class="skeleton" style="height:36px;border-radius:8px"></div></div>
+      <div class="skel-card"><div class="skeleton" style="height:160px;margin-bottom:12px"></div><div class="skeleton" style="height:10px;width:40%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;margin-bottom:6px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:14px"></div><div class="skeleton" style="height:36px;border-radius:8px"></div></div>
+      <div class="skel-card"><div class="skeleton" style="height:160px;margin-bottom:12px"></div><div class="skeleton" style="height:10px;width:40%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;margin-bottom:6px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:14px"></div><div class="skeleton" style="height:36px;border-radius:8px"></div></div>
+      <div class="skel-card"><div class="skeleton" style="height:160px;margin-bottom:12px"></div><div class="skeleton" style="height:10px;width:40%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;margin-bottom:6px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:14px"></div><div class="skeleton" style="height:36px;border-radius:8px"></div></div>
+      <div class="skel-card"><div class="skeleton" style="height:160px;margin-bottom:12px"></div><div class="skeleton" style="height:10px;width:40%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;margin-bottom:6px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:14px"></div><div class="skeleton" style="height:36px;border-radius:8px"></div></div>
+      <div id="no-results">
+        <h3>No products found</h3>
+        <p>Try a different search term or browse a category</p>
+        <button class="nr-btn" onclick="filterByCategory('all')">View All Products</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="nl-section">
+  <div class="container">
+    <div class="nl-card">
+      <h2>Subscribe to our newsletter</h2>
+      <p>Get the latest updates on new products and upcoming sales directly in your inbox.</p>
+      <form class="nl-form">
+        <input id="nl-input" type="email" placeholder="Enter your email address" required />
+        <button class="nl-sub" type="submit">Subscribe Now</button>
+      </form>
+      <p class="nl-note">We respect your privacy. Unsubscribe at any time.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-name"> 🛍️ Z E N V Y </span>
+        </a>
+        <p>Premium quality products for your lifestyle. The best brands and latest trends with reliable delivery.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">All Products</a></li>
+          <li><a href="#">Electronics</a></li>
+          <li><a href="#">Fashion</a></li>
+          <li><a href="#">Jewelery</a></li>
+          <li><a href="#">Offers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2026 ShopKart Inc. All rights reserved.</span>
+      <div class="pay-badges">
+        <div class="pay-badge">VISA</div>
+        <div class="pay-badge">MC</div>
+        <div class="pay-badge">PAYPAL</div>
+        <div class="pay-badge">APPLE</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="zenvy.js"></script>
+</body>
+</html>

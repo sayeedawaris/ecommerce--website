@@ -78,6 +78,7 @@
         <div class="prof-hname" id="prof-name">User</div>
         <div class="prof-hemail" id="prof-email">user@email.com</div>
       </div>
+      <button onclick="goToAdmin()">Login as Admin</button>
       <button class="cart-close-btn" onclick="closeProfile()">
         <img src="close.svg" alt="close" style="width:18px;height:18px;filter:invert(1)"/>
       </button>
@@ -85,26 +86,17 @@
 
     <div class="prof-stats">
       <div class="prof-stat" onclick="closeProfile();openCart()">
-        <div class="ps-val" id="prof-cart-count">0 items</div>
+        <div class="ps-val" id="prof-cart-count">Items in Cart</div>
         <div class="ps-lbl">🛒 Cart</div>
-        <div class="ps-sub" id="prof-cart-total">$0.00</div>
+
       </div>
       <div class="prof-stat" onclick="closeProfile();openWishlist()">
-        <div class="ps-val" id="prof-wish-count">0 items</div>
+        <div class="ps-val" id="prof-wish-count"> Items in Wishlist</div>
         <div class="ps-lbl">♥ Wishlist</div>
-        <div class="ps-sub">saved</div>
+
       </div>
     </div>
 
-    <div class="prof-section">
-      <div class="prof-sec-head">♥ My Wishlist</div>
-      <div id="prof-wish-list"></div>
-    </div>
-
-    <div class="prof-section">
-      <div class="prof-sec-head">🛒 Items in Cart</div>
-      <div id="prof-cart-list"></div>
-    </div>
 
     <div class="prof-footer">
       <button class="prof-logout-btn" onclick="document.getElementById('logoutBtn').click()">

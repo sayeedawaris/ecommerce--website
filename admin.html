@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+
+  <body>
+    <header class="admin-header">
+      <h1>Admin Dashboard</h1>
+
+<button class="btn btn-primary" onclick="showForm()">Add Product</button>
+    </header>
+
+    <div id="products" class="products-container"></div>
+
+    <div id="overlay" class="overlay" onclick="closeForm()"></div>
+
+    <form>
+      <div id="product-form" class="add-form">
+        <h3 id="form-title">Add Product</h3>
+
+        <input id="prod-id" type="hidden" />
+
+        <input id="prod-title" placeholder="Title :" />
+
+        <input id="prod-price" placeholder="Price $ :" />
+
+        <input id="prod-image" placeholder="Image URL :" />
+
+        <textarea id="prod-desc" placeholder="Description :"></textarea>
+
+        <div class="form-actions">
+   <button type="button" class="btn btn-primary" onclick="saveProduct()">Save</button>
+<button type="button" class="btn btn-danger" onclick="closeForm()">Cancel</button>
+      </div>
+    </form>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

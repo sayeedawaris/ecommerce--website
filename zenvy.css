@@ -1507,7 +1507,7 @@ footer {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(3px);
 }
 
 #auth-prompt-card {
@@ -1778,7 +1778,6 @@ footer {
   font-weight: 600;
   color: var(--text);
   display: -webkit-box;
-  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

@@ -1,20 +1,14 @@
-/* ============================================================
-   ZENVY — zenvy.js  (with user profile, per-user cart/wishlist)
-   ============================================================ */
 
-/* ---------- helpers ---------- */
 function getLoggedInUser() {
-  return localStorage.getItem('loggedIn') === 'true'
-    ? JSON.parse(localStorage.getItem('zenvy-user') || 'null')
+  return localStorage.getItem('loggedIn') === 'true'? JSON.parse(localStorage.getItem('zenvy-user') || 'null')
     : null;
 }
 
-function userKey(suffix) {
+function userKey(keytype) {
   const u = getLoggedInUser();
-  return u ? `sk-${u.email}-${suffix}` : null;
+  return u ? `sk-${u.email}-${keytype}` : null;
 }
 
-/* ---------- state ---------- */
 let allProducts = [];
 let cart     = [];
 let wishlist = new Set();
@@ -35,7 +29,6 @@ const catCfg = {
   "women's clothing": { icon:'👗', label:"Women's Fashion", bg:'#fdf2f8', color:'#db2777' },
 };
 
-/* ---------- products ---------- */
 function loadProducts() {
   fetch('https://fakestoreapi.com/products')
     .then(res => res.json())
@@ -127,7 +120,18 @@ function renderProducts(products) {
   grid.appendChild(frag);
 }
 
-/* ---------- auth-gate helpers ---------- */
+function showAuthPrompt(type) {
+  const msg = type === 'cart'? 'You need to be logged in to add items to your cart.'
+  : 'You need to be logged in to save items to your wishlist.';
+
+  document.getElementById('auth-prompt-msg').textContent = msg;
+  document.getElementById('auth-prompt-overlay').classList.add('open');
+}
+
+function closeAuthPrompt() {
+  document.getElementById('auth-prompt-overlay').classList.remove('open');
+}
+
 function requireLogin(action) {
   showAuthPrompt(action);
 }
@@ -142,21 +146,9 @@ function handleWishClick(id, btn) {
   toggleWishlist(id, btn);
 }
 
-/* ---------- auth prompt modal ---------- */
-function showAuthPrompt(type) {
-  const msg = type === 'cart'
-    ? 'You need to be logged in to add items to your cart.'
-    : 'You need to be logged in to save items to your wishlist.';
 
-  document.getElementById('auth-prompt-msg').textContent = msg;
-  document.getElementById('auth-prompt-overlay').classList.add('open');
-}
 
-function closeAuthPrompt() {
-  document.getElementById('auth-prompt-overlay').classList.remove('open');
-}
 
-/* ---------- cart ---------- */
 function addToCart(id) {
   const p = allProducts.find(x => x.id === id);
   if (!p) return;
@@ -257,7 +249,7 @@ function closeCart() {
 
 document.getElementById('cart-backdrop').addEventListener('click', closeCart);
 
-/* ---------- wishlist ---------- */
+
 function toggleWishlist(id, btn) {
   const isWished = wishlist.has(id);
   isWished ? wishlist.delete(id) : wishlist.add(id);
@@ -334,61 +326,18 @@ function removeFromWishlist(id) {
   if (btn) btn.classList.remove('on');
 }
 
-/* ---------- user profile panel ---------- */
+
 function openProfile() {
   const user = getLoggedInUser();
   if (!user) { window.location.href = 'login.html'; return; }
 
-  // populate info
+
   document.getElementById('prof-name').textContent  = user.name  || '—';
   document.getElementById('prof-email').textContent = user.email || '—';
   document.getElementById('prof-initials').textContent =
     (user.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
 
-  // cart summary
-  const cartCount = cart.reduce((s, c) => s + c.qty, 0);
-  const cartTotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
-  document.getElementById('prof-cart-count').textContent = cartCount + ' item' + (cartCount !== 1 ? 's' : '');
-  document.getElementById('prof-cart-total').textContent = '$' + cartTotal.toFixed(2);
-
-  // wish summary
-  document.getElementById('prof-wish-count').textContent = wishlist.size + ' item' + (wishlist.size !== 1 ? 's' : '');
-
-  const wl = document.getElementById('prof-wish-list');
-  if (!wishlist.size) {
-    wl.innerHTML = '<p style="color:var(--text-3);font-size:13px;text-align:center;padding:12px 0">No wishlisted items yet.</p>';
-  } else {
-    let html = '';
-    wishlist.forEach(id => {
-      const p = allProducts.find(x => x.id === id);
-      if (!p) return;
-      html += `
-        <div class="prof-mini-item">
-          <img src="${p.image}" alt="${p.title}"/>
-          <div class="prof-mi-info">
-            <div class="prof-mi-title">${p.title}</div>
-            <div class="prof-mi-price">$${p.price.toFixed(2)}</div>
-          </div>
-          <button class="prof-mi-rm" onclick="removeFromWishlist(${p.id});openProfile()">✕</button>
-        </div>`;
-    });
-    wl.innerHTML = html;
-  }
-
-  const cl = document.getElementById('prof-cart-list');
-  if (!cart.length) {
-    cl.innerHTML = '<p style="color:var(--text-3);font-size:13px;text-align:center;padding:12px 0">Your cart is empty.</p>';
-  } else {
-    cl.innerHTML = cart.map(item => `
-      <div class="prof-mini-item">
-        <img src="${item.image}" alt="${item.title}"/>
-        <div class="prof-mi-info">
-          <div class="prof-mi-title">${item.title}</div>
-          <div class="prof-mi-price">$${(item.price * item.qty).toFixed(2)} × ${item.qty}</div>
-        </div>
-        <button class="prof-mi-rm" onclick="removeFromCart(${item.id});openProfile()">✕</button>
-      </div>`).join('');
-  }
+  
 
   document.getElementById('profile-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -397,6 +346,9 @@ function openProfile() {
 function closeProfile() {
   document.getElementById('profile-overlay').classList.remove('open');
   document.body.style.overflow = '';
+}
+function goToAdmin(){
+  window.location.href = "admin.html";
 }
 
 
